@@ -1,0 +1,9 @@
+go 1.25.7
+
+use (
+	./apps/connect-server
+	./apps/persistence-service/packages/functions
+	./apps/timer-server
+	./packages/common
+	./packages/protocol
+)
