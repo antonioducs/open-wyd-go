@@ -1,0 +1,5 @@
+# apps/connect-server/.air.toml
+[build]
+  cmd = "go build -o ./tmp/main ./cmd/app/main.go"
+  bin = "./tmp/main"
+  include_dir = ["cmd", "internal", "../../pkg"]
