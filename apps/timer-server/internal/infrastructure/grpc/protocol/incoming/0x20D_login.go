@@ -3,7 +3,7 @@ package incoming
 import (
 	"bytes"
 
-	"github.com/antonioducs/wyd/timer-server/internal/infrastructre/grpc/protocol"
+	"github.com/antonioducs/wyd/timer-server/internal/infrastructure/grpc/protocol"
 )
 
 type Login struct {

@@ -1,7 +1,7 @@
 package grpc
 
 import (
-	"github.com/antonioducs/wyd/timer-server/internal/infrastructre/grpc/protocol/outgoing"
+	"github.com/antonioducs/wyd/timer-server/internal/infrastructure/grpc/protocol/outgoing"
 )
 
 type GRPCPresenter struct {

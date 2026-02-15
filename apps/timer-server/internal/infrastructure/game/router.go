@@ -7,8 +7,8 @@ import (
 
 	"github.com/antonioducs/wyd/timer-server/internal/application"
 	"github.com/antonioducs/wyd/timer-server/internal/domain/usecase"
-	"github.com/antonioducs/wyd/timer-server/internal/infrastructre/grpc/protocol"
-	"github.com/antonioducs/wyd/timer-server/internal/infrastructre/grpc/protocol/incoming"
+	"github.com/antonioducs/wyd/timer-server/internal/infrastructure/grpc/protocol"
+	"github.com/antonioducs/wyd/timer-server/internal/infrastructure/grpc/protocol/incoming"
 )
 
 type Router struct {

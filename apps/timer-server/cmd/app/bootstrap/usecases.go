@@ -3,7 +3,7 @@ package bootstrap
 import (
 	"github.com/antonioducs/wyd/timer-server/internal/application"
 	"github.com/antonioducs/wyd/timer-server/internal/domain/usecase"
-	"github.com/antonioducs/wyd/timer-server/internal/infrastructre/grpc"
+	"github.com/antonioducs/wyd/timer-server/internal/infrastructure/grpc"
 )
 
 func NewUseCases(infra *InfraContainer, repos *RepositoryContainer) *application.UseCaseContainer {

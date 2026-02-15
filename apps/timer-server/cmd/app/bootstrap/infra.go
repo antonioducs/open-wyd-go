@@ -7,7 +7,7 @@ import (
 
 	"github.com/antonioducs/wyd/logger"
 	"github.com/antonioducs/wyd/pkg/configs"
-	"github.com/antonioducs/wyd/timer-server/internal/infrastructre/grpc"
+	"github.com/antonioducs/wyd/timer-server/internal/infrastructure/grpc"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 

@@ -1,7 +1,7 @@
 package bootstrap
 
 import (
-	"github.com/antonioducs/wyd/timer-server/internal/infrastructre/game"
+	"github.com/antonioducs/wyd/timer-server/internal/infrastructure/game"
 )
 
 type AppContainer struct {
