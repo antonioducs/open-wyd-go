@@ -7,7 +7,8 @@ import (
 	"log/slog"
 
 	"github.com/antonioducs/wyd/timer-server/internal/application"
-	"github.com/antonioducs/wyd/timer-server/internal/domain/usecase"
+	"github.com/antonioducs/wyd/timer-server/internal/domain/usecase/character"
+	"github.com/antonioducs/wyd/timer-server/internal/domain/usecase/login"
 	"github.com/antonioducs/wyd/timer-server/internal/infrastructure/grpc/protocol"
 	"github.com/antonioducs/wyd/timer-server/internal/infrastructure/grpc/protocol/incoming"
 )
@@ -32,11 +33,22 @@ func (r *Router) RoutePacket(ctx context.Context, sessionID uint32, payload []by
 	switch packetID {
 	case protocol.PackageIDLogin:
 		msg := protocol.Cast[incoming.Login](payload)
-		r.usecases.Login.Execute(usecase.LoginInput{
+
+		r.usecases.Login.Execute(login.LoginInput{
 			Context:   ctx,
 			SessionID: sessionID,
 			Username:  msg.GetUsername(),
 			Password:  msg.GetPassword(),
+		})
+
+	case protocol.PackageIDCreateCharacter:
+		msg := protocol.Cast[incoming.CreateChar](payload)
+		r.usecases.CreateCharacter.Execute(character.CreateCharacterInput{
+			Context:   ctx,
+			SessionID: sessionID,
+			Name:      msg.GetName(),
+			ClassID:   msg.ClassID,
+			SlotID:    uint8(msg.SlotID),
 		})
 
 	default:

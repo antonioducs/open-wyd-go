@@ -15,3 +15,22 @@ type Account struct {
 	Email        string           `json:"email"`
 	CreatedAt    pgtype.Timestamp `json:"created_at"`
 }
+
+type Character struct {
+	ID         int32            `json:"id"`
+	AccountID  int32            `json:"account_id"`
+	Name       string           `json:"name"`
+	Level      int32            `json:"level"`
+	Experience int64            `json:"experience"`
+	Gold       int32            `json:"gold"`
+	GuildID    int32            `json:"guild_id"`
+	PosX       int32            `json:"pos_x"`
+	PosY       int32            `json:"pos_y"`
+	Slot       int32            `json:"slot"`
+	ClassID    int32            `json:"class_id"`
+	Status     []byte           `json:"status"`
+	Equipment  []byte           `json:"equipment"`
+	Inventory  []byte           `json:"inventory"`
+	CreatedAt  pgtype.Timestamp `json:"created_at"`
+	UpdatedAt  pgtype.Timestamp `json:"updated_at"`
+}

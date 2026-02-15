@@ -1,0 +1,2 @@
+ALTER TABLE accounts
+ADD COLUMN storage JSONB NOT NULL DEFAULT '[]'::JSONB;

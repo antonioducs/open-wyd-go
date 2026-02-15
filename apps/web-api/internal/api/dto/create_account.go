@@ -7,6 +7,6 @@ type CreateAccountRequest struct {
 }
 
 type CreateAccountResponse struct {
-	ID       uint32 `json:"id" example:"105"`
+	ID       int32  `json:"id" example:"105"`
 	Username string `json:"username" example:"antonio_hero"`
 }

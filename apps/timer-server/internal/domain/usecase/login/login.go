@@ -1,4 +1,4 @@
-package usecase
+package login
 
 import (
 	"context"
@@ -9,17 +9,23 @@ import (
 )
 
 type LoginUsecase struct {
-	output        gateway.GameOutput
-	accountReader shared_gateway.AccountReader
+	output              gateway.GameOutput
+	accountReader       shared_gateway.AccountReader
+	sessionRepository   gateway.SessionRepository
+	characterRepository shared_gateway.CharacterRepository
 }
 
 func NewLoginUsecase(
 	output gateway.GameOutput,
 	accountReader shared_gateway.AccountReader,
+	characterRepository shared_gateway.CharacterRepository,
+	sessionRepository gateway.SessionRepository,
 ) *LoginUsecase {
 	return &LoginUsecase{
-		output:        output,
-		accountReader: accountReader,
+		output:              output,
+		accountReader:       accountReader,
+		characterRepository: characterRepository,
+		sessionRepository:   sessionRepository,
 	}
 }
 
@@ -43,6 +49,14 @@ func (u *LoginUsecase) Execute(input LoginInput) {
 		u.output.SendMessage(input.SessionID, "Usuario e/ou senha incorretos")
 		return
 	}
+
+	characters, err := u.characterRepository.FindByAccountID(input.Context, account.ID)
+	if err != nil {
+		u.output.SendMessage(input.SessionID, "Erro ao buscar personagens")
+		return
+	}
+
+	u.sessionRepository.Add(input.SessionID, account, characters)
 
 	u.output.SendCharList(input.SessionID)
 }

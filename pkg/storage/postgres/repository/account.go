@@ -29,7 +29,7 @@ func (r *PostgresAccountRepo) FindByUsername(ctx context.Context, username strin
 	}
 
 	acc := &entity.Account{
-		ID:           uint32(dao.ID),
+		ID:           dao.ID,
 		Username:     dao.Username,
 		PasswordHash: dao.PasswordHash,
 		CreatedAt:    dao.CreatedAt.Time,
@@ -49,7 +49,7 @@ func (r *PostgresAccountRepo) Create(ctx context.Context, account *entity.Accoun
 		return err
 	}
 
-	account.ID = uint32(model.ID)
+	account.ID = model.ID
 	account.CreatedAt = model.CreatedAt.Time
 
 	return nil

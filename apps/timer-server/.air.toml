@@ -1,5 +1,6 @@
 # apps/timer-server/.air.toml
 [build]
-  cmd = "go build -o ./tmp/main ./cmd/app/main.go && chmod +x ./tmp/main"
-  bin = "./tmp/main"
+  cmd = "go build -gcflags='all=-N -l' -o ./tmp/main ./cmd/app/main.go && chmod +x ./tmp/main"
+  full_bin = "dlv exec --accept-multiclient --log --headless --continue --api-version=2 --listen=:40000 ./tmp/main"
   include_dir = ["cmd", "internal", "../../pkg"]
+  exclude_dir = ["tmp"]

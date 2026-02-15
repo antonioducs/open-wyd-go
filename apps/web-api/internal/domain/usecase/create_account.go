@@ -16,7 +16,7 @@ type CreateAccountUsecase struct {
 }
 
 type CreateAccountOutput struct {
-	ID       uint32
+	ID       int32
 	Username string
 }
 
