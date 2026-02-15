@@ -22,8 +22,8 @@ type Config struct {
 	Env      Env
 }
 
-func Load() (*Config, error) {
-	_ = godotenv.Load()
+func NewConfig() (*Config, error) {
+	_ = godotenv.Load("../../.env")
 
 	maxConn, err := strconv.Atoi(os.Getenv("MAX_CONN"))
 	if err != nil {

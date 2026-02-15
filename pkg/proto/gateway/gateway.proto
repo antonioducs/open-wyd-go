@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package gateway;
+
+option go_package = "github.com/antonioducs/wyd/pkg/proto/gateway";
+
+service GameGate {
+  rpc StreamPackets (stream Packet) returns (stream Packet);
+}
+
+message Packet {
+  uint32 session_id = 1;
+  EventType type    = 2;
+  bytes payload     = 3;
+}
+
+enum EventType {
+  DATA       = 0;
+  CONNECT    = 1;
+  DISCONNECT = 2;
+}

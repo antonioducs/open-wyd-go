@@ -3,17 +3,24 @@ package logger
 import (
 	"log/slog"
 	"os"
+	"time"
 
-	"github.com/antonioducs/wyd/connect-server/configs"
+	"github.com/antonioducs/wyd/pkg/configs"
+	"github.com/lmittmann/tint"
+	"github.com/mattn/go-isatty"
 )
 
-func New(env configs.Env) *slog.Logger {
+func NewLogger(env configs.Env) *slog.Logger {
 	var handler slog.Handler
 
 	if env == configs.Prod {
 		handler = slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo})
 	} else {
-		handler = slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug})
+		handler = tint.NewHandler(os.Stdout, &tint.Options{
+			Level:      slog.LevelDebug,
+			TimeFormat: time.StampMilli,
+			NoColor:    !isatty.IsTerminal(os.Stdout.Fd()),
+		})
 	}
 
 	return slog.New(handler)

@@ -3,7 +3,7 @@ package incoming
 import (
 	"bytes"
 
-	"github.com/antonioducs/wyd/protocol"
+	"github.com/antonioducs/wyd/timer-server/internal/infrastructre/grpc/protocol"
 )
 
 type Login struct {
@@ -19,4 +19,8 @@ func (l *Login) GetUsername() string {
 
 func (l *Login) GetPassword() string {
 	return string(bytes.Trim(l.Password[:], "\x00"))
+}
+
+func NewLogin(data []byte) *Login {
+	return protocol.Cast[Login](data)
 }

@@ -1,4 +1,4 @@
-# apps/connect-server/.air.toml
+# apps/timer-server/.air.toml
 [build]
   cmd = "go build -o ./tmp/main ./cmd/app/main.go && chmod +x ./tmp/main"
   bin = "./tmp/main"

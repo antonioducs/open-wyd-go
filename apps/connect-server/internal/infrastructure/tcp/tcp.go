@@ -5,12 +5,10 @@ import (
 	"io"
 	"log/slog"
 	"net"
-	"unsafe"
 
-	"github.com/antonioducs/wyd/protocol"
-	"github.com/antonioducs/wyd/protocol/crypto"
-	"github.com/antonioducs/wyd/protocol/incoming"
-	"github.com/antonioducs/wyd/protocol/outgoing"
+	"github.com/antonioducs/wyd/connect-server/internal/infrastructure/crypto"
+	"github.com/antonioducs/wyd/connect-server/internal/infrastructure/grpc"
+	"github.com/antonioducs/wyd/connect-server/internal/session"
 )
 
 type TCPServer struct {
@@ -57,10 +55,15 @@ func (s *TCPServer) Start() error {
 }
 
 func (s *TCPServer) handleConnection(conn net.Conn) {
+	sess := session.Global.Add(conn)
+
+	s.Logger.Info("Nova conexão", "id", sess.ID, "remote", conn.RemoteAddr())
+
 	defer func() {
+		s.Logger.Info("Conexão encerrada", "id", sess.ID)
+		session.Global.Remove(sess.ID)
 		<-s.MaxConnChan
 		conn.Close()
-		s.Logger.Info("Conexão encerrada", "remote", conn.RemoteAddr())
 	}()
 
 	buffer := make([]byte, 4096)
@@ -74,34 +77,20 @@ func (s *TCPServer) handleConnection(conn net.Conn) {
 			return
 		}
 
-		currentData := buffer[:n]
-
-		if n < 4 {
+		if n <= 4 {
 			continue
 		}
 
-		if n == 120 {
-			currentData = currentData[4:120]
-		}
-
-		decryptedData, err := crypto.Decrypt(currentData)
+		decryptedData, err := crypto.Decrypt(buffer)
 		if err != nil {
-			s.Logger.Error("Erro ao descriptografar pacote", "error", err)
+			s.Logger.Error("Erro ao descriptografar", "error", err)
 			continue
 		}
 
-		header := (*protocol.PacketHeader)(unsafe.Pointer(&decryptedData[0]))
-
-		switch header.PacketID {
-		case protocol.PackageIDLogin:
-			login := (*incoming.Login)(unsafe.Pointer(&decryptedData[0]))
-			s.Logger.Info("Pacote de login recebido",
-				"remote", conn.RemoteAddr(),
-				"packetId", fmt.Sprintf("%x", login.Header.PacketID))
-			s.Logger.Info("Senha", "password", login.GetPassword())
-			s.Logger.Info("Usuário", "username", login.GetUsername())
-			message := outgoing.NewMessage("Hello, world!")
-			conn.Write(message.Header.PrepareToSend())
+		if grpc.Hub != nil {
+			grpc.Hub.SendToTimer(sess.ID, decryptedData)
+		} else {
+			s.Logger.Warn("Hub gRPC não iniciado, pacote perdido", "id", sess.ID)
 		}
 	}
 }

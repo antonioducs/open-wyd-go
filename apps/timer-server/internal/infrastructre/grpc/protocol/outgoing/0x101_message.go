@@ -3,7 +3,7 @@ package outgoing
 import (
 	"unsafe"
 
-	"github.com/antonioducs/wyd/protocol"
+	"github.com/antonioducs/wyd/timer-server/internal/infrastructre/grpc/protocol"
 )
 
 type Message struct {

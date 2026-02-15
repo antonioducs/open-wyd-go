@@ -1,7 +1,9 @@
 go 1.25.7
 
 use (
-	./apps/connect-server	
-	./pkg/protocol
+	./apps/connect-server
+	./apps/timer-server
+	./pkg/configs
 	./pkg/logger
+	./pkg/proto
 )

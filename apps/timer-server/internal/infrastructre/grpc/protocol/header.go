@@ -4,8 +4,6 @@ import (
 	"math/rand"
 	"time"
 	"unsafe"
-
-	"github.com/antonioducs/wyd/protocol/crypto"
 )
 
 type PacketHeader struct {
@@ -41,7 +39,5 @@ func (h *PacketHeader) PrepareToSend() []byte {
 
 	data := unsafe.Slice((*byte)(ptr), int(totalSize))
 
-	encryptedData := crypto.Encrypt(data)
-
-	return encryptedData
+	return data
 }
