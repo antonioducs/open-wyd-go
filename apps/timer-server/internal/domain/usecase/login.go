@@ -1,17 +1,23 @@
 package usecase
 
 import (
-	"fmt"
-
+	shared_gateway "github.com/antonioducs/wyd/pkg/domain/gateway"
 	"github.com/antonioducs/wyd/timer-server/internal/domain/gateway"
 )
 
 type LoginUsecase struct {
-	output gateway.GameOutput
+	output        gateway.GameOutput
+	accountReader shared_gateway.AccountReader
 }
 
-func NewLoginUsecase(output gateway.GameOutput) *LoginUsecase {
-	return &LoginUsecase{output: output}
+func NewLoginUsecase(
+	output gateway.GameOutput,
+	accountReader shared_gateway.AccountReader,
+) *LoginUsecase {
+	return &LoginUsecase{
+		output:        output,
+		accountReader: accountReader,
+	}
 }
 
 type LoginInput struct {
@@ -22,7 +28,16 @@ type LoginInput struct {
 
 func (u *LoginUsecase) Execute(input LoginInput) {
 
-	fmt.Println(input)
+	account, err := u.accountReader.FindByUsername(input.Username)
+	if err != nil {
+		u.output.SendMessage(input.SessionID, "Usuario e/ou senha incorretos")
+		return
+	}
 
-	u.output.SendMessage(input.SessionID, "Hello, "+input.Username)
+	if account.PasswordHash != input.Password {
+		u.output.SendMessage(input.SessionID, "Usuario e/ou senha incorretos")
+		return
+	}
+
+	u.output.SendMessage(input.SessionID, "Login realizado com sucesso")
 }

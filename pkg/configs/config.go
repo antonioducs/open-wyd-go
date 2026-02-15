@@ -15,11 +15,12 @@ const (
 )
 
 type Config struct {
-	Host     string
-	TCPPort  string
-	GRPCPort string
-	MaxConn  int
-	Env      Env
+	Host        string
+	TCPPort     string
+	GRPCPort    string
+	MaxConn     int
+	Env         Env
+	DatabaseURL string
 }
 
 func NewConfig() (*Config, error) {
@@ -30,10 +31,11 @@ func NewConfig() (*Config, error) {
 		return nil, err
 	}
 	return &Config{
-		Host:     os.Getenv("HOST"),
-		TCPPort:  os.Getenv("TCP_PORT"),
-		GRPCPort: os.Getenv("GRPC_PORT"),
-		MaxConn:  maxConn,
-		Env:      Env(os.Getenv("ENV")),
+		Host:        os.Getenv("HOST"),
+		TCPPort:     os.Getenv("TCP_PORT"),
+		GRPCPort:    os.Getenv("GRPC_PORT"),
+		MaxConn:     maxConn,
+		Env:         Env(os.Getenv("ENV")),
+		DatabaseURL: os.Getenv("DATABASE_URL"),
 	}, nil
 }

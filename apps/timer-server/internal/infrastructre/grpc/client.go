@@ -31,6 +31,10 @@ func NewClient(addr string, logger *slog.Logger, handler PacketHandler) *Client 
 	}
 }
 
+func (c *Client) SetHandler(handler PacketHandler) {
+	c.handler = handler
+}
+
 func (c *Client) Start() {
 	for {
 		c.logger.Info("Tentando conectar ao Hub...", "addr", c.hubAddress)

@@ -4,6 +4,8 @@ use (
 	./apps/connect-server
 	./apps/timer-server
 	./pkg/configs
+	./pkg/domain
 	./pkg/logger
 	./pkg/proto
+	./pkg/storage/postgres
 )
