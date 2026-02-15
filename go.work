@@ -3,6 +3,7 @@ go 1.25.7
 use (
 	./apps/connect-server
 	./apps/timer-server
+	./apps/web-api
 	./pkg/configs
 	./pkg/domain
 	./pkg/logger

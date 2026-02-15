@@ -1,0 +1,86 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API for managing accounts and characters of the Open WYD server.",
+        "title": "Open WYD Web API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {
+        "/accounts": {
+            "post": {
+                "description": "Registers a new user in the database and returns the created ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "summary": "Create Account",
+                "parameters": [
+                    {
+                        "description": "Account data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_antonioducs_wyd_web-api_internal_api_dto.CreateAccountRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_antonioducs_wyd_web-api_internal_api_dto.CreateAccountResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "github_com_antonioducs_wyd_web-api_internal_api_dto.CreateAccountRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password",
+                "username"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "antonio@wyd.com"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "senha_super_secreta"
+                },
+                "username": {
+                    "type": "string",
+                    "minLength": 3,
+                    "example": "antonio_hero"
+                }
+            }
+        },
+        "github_com_antonioducs_wyd_web-api_internal_api_dto.CreateAccountResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": 105
+                },
+                "username": {
+                    "type": "string",
+                    "example": "antonio_hero"
+                }
+            }
+        }
+    }
+}

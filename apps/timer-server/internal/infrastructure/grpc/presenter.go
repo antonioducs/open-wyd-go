@@ -19,3 +19,11 @@ func (p *GRPCPresenter) SendMessage(sessionID uint32, text string) {
 		p.client.Send(sessionID, pkt.Header.PrepareToSend())
 	}
 }
+
+func (p *GRPCPresenter) SendCharList(sessionID uint32) {
+	pkt := outgoing.NewCharList()
+
+	if p.client != nil {
+		p.client.Send(sessionID, pkt.Header.PrepareToSend())
+	}
+}

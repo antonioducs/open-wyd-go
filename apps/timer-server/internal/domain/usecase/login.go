@@ -1,8 +1,11 @@
 package usecase
 
 import (
+	"context"
+
 	shared_gateway "github.com/antonioducs/wyd/pkg/domain/gateway"
 	"github.com/antonioducs/wyd/timer-server/internal/domain/gateway"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type LoginUsecase struct {
@@ -21,6 +24,7 @@ func NewLoginUsecase(
 }
 
 type LoginInput struct {
+	Context   context.Context
 	SessionID uint32
 	Username  string
 	Password  string
@@ -28,16 +32,17 @@ type LoginInput struct {
 
 func (u *LoginUsecase) Execute(input LoginInput) {
 
-	account, err := u.accountReader.FindByUsername(input.Username)
+	account, err := u.accountReader.FindByUsername(input.Context, input.Username)
 	if err != nil {
 		u.output.SendMessage(input.SessionID, "Usuario e/ou senha incorretos")
 		return
 	}
 
-	if account.PasswordHash != input.Password {
+	err = bcrypt.CompareHashAndPassword([]byte(account.PasswordHash), []byte(input.Password))
+	if err != nil {
 		u.output.SendMessage(input.SessionID, "Usuario e/ou senha incorretos")
 		return
 	}
 
-	u.output.SendMessage(input.SessionID, "Login realizado com sucesso")
+	u.output.SendCharList(input.SessionID)
 }

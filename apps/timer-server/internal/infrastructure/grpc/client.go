@@ -12,7 +12,7 @@ import (
 	pb "github.com/antonioducs/wyd/pkg/proto/gateway"
 )
 
-type PacketHandler func(sessionID uint32, payload []byte)
+type PacketHandler func(ctx context.Context, sessionID uint32, payload []byte)
 
 type Client struct {
 	hubAddress string
@@ -109,7 +109,7 @@ func (c *Client) connectAndServe() error {
 		case pb.EventType_DISCONNECT:
 			c.logger.Info("Jogador Desconectou", "session", pkt.SessionId)
 		case pb.EventType_DATA:
-			c.handler(pkt.SessionId, pkt.Payload)
+			c.handler(stream.Context(), pkt.SessionId, pkt.Payload)
 		}
 	}
 }

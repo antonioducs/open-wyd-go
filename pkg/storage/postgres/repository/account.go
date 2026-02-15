@@ -22,8 +22,8 @@ func NewPostgresAccountRepo(pool *pgxpool.Pool) *PostgresAccountRepo {
 	}
 }
 
-func (r *PostgresAccountRepo) FindByUsername(username string) (*entity.Account, error) {
-	dao, err := r.queries.GetAccountByUsername(context.Background(), username)
+func (r *PostgresAccountRepo) FindByUsername(ctx context.Context, username string) (*entity.Account, error) {
+	dao, err := r.queries.GetAccountByUsername(ctx, username)
 	if err != nil {
 		return nil, err
 	}
@@ -32,7 +32,25 @@ func (r *PostgresAccountRepo) FindByUsername(username string) (*entity.Account, 
 		ID:           uint32(dao.ID),
 		Username:     dao.Username,
 		PasswordHash: dao.PasswordHash,
+		CreatedAt:    dao.CreatedAt.Time,
+		Email:        dao.Email,
 	}
 
 	return acc, nil
+}
+
+func (r *PostgresAccountRepo) Create(ctx context.Context, account *entity.Account) error {
+	model, err := r.queries.CreateAccount(ctx, db.CreateAccountParams{
+		Username:     account.Username,
+		PasswordHash: account.PasswordHash,
+		Email:        account.Email,
+	})
+	if err != nil {
+		return err
+	}
+
+	account.ID = uint32(model.ID)
+	account.CreatedAt = model.CreatedAt.Time
+
+	return nil
 }

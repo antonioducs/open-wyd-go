@@ -21,6 +21,8 @@ type Config struct {
 	MaxConn     int
 	Env         Env
 	DatabaseURL string
+	HTTPPort    string
+	HTTPHost    string
 }
 
 func NewConfig() (*Config, error) {
@@ -37,5 +39,7 @@ func NewConfig() (*Config, error) {
 		MaxConn:     maxConn,
 		Env:         Env(os.Getenv("ENV")),
 		DatabaseURL: os.Getenv("DATABASE_URL"),
+		HTTPPort:    os.Getenv("HTTP_PORT"),
+		HTTPHost:    os.Getenv("HTTP_HOST"),
 	}, nil
 }

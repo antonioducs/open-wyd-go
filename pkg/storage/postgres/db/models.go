@@ -12,5 +12,6 @@ type Account struct {
 	ID           int32            `json:"id"`
 	Username     string           `json:"username"`
 	PasswordHash string           `json:"password_hash"`
+	Email        string           `json:"email"`
 	CreatedAt    pgtype.Timestamp `json:"created_at"`
 }

@@ -10,30 +10,32 @@ import (
 )
 
 const createAccount = `-- name: CreateAccount :one
-INSERT INTO accounts (username, password_hash)
-VALUES ($1, $2)
-RETURNING id, username, password_hash, created_at
+INSERT INTO accounts (username, password_hash, email)
+VALUES ($1, $2, $3)
+RETURNING id, username, password_hash, email, created_at
 `
 
 type CreateAccountParams struct {
 	Username     string `json:"username"`
 	PasswordHash string `json:"password_hash"`
+	Email        string `json:"email"`
 }
 
 func (q *Queries) CreateAccount(ctx context.Context, arg CreateAccountParams) (Account, error) {
-	row := q.db.QueryRow(ctx, createAccount, arg.Username, arg.PasswordHash)
+	row := q.db.QueryRow(ctx, createAccount, arg.Username, arg.PasswordHash, arg.Email)
 	var i Account
 	err := row.Scan(
 		&i.ID,
 		&i.Username,
 		&i.PasswordHash,
+		&i.Email,
 		&i.CreatedAt,
 	)
 	return i, err
 }
 
 const getAccountByID = `-- name: GetAccountByID :one
-SELECT id, username, password_hash, created_at
+SELECT id, username, password_hash, email, created_at
 FROM accounts
 WHERE id = $1
 ORDER BY created_at DESC LIMIT 1
@@ -46,13 +48,14 @@ func (q *Queries) GetAccountByID(ctx context.Context, id int32) (Account, error)
 		&i.ID,
 		&i.Username,
 		&i.PasswordHash,
+		&i.Email,
 		&i.CreatedAt,
 	)
 	return i, err
 }
 
 const getAccountByUsername = `-- name: GetAccountByUsername :one
-SELECT id, username, password_hash, created_at
+SELECT id, username, password_hash, email, created_at
 FROM accounts
 WHERE username = $1
 ORDER BY created_at DESC LIMIT 1
@@ -65,6 +68,7 @@ func (q *Queries) GetAccountByUsername(ctx context.Context, username string) (Ac
 		&i.ID,
 		&i.Username,
 		&i.PasswordHash,
+		&i.Email,
 		&i.CreatedAt,
 	)
 	return i, err

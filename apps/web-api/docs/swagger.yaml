@@ -1,0 +1,59 @@
+basePath: /api/v1
+definitions:
+  github_com_antonioducs_wyd_web-api_internal_api_dto.CreateAccountRequest:
+    properties:
+      email:
+        example: antonio@wyd.com
+        type: string
+      password:
+        example: senha_super_secreta
+        type: string
+      username:
+        example: antonio_hero
+        minLength: 3
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  github_com_antonioducs_wyd_web-api_internal_api_dto.CreateAccountResponse:
+    properties:
+      id:
+        example: 105
+        type: integer
+      username:
+        example: antonio_hero
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API for managing accounts and characters of the Open WYD server.
+  termsOfService: http://swagger.io/terms/
+  title: Open WYD Web API
+  version: "1.0"
+paths:
+  /accounts:
+    post:
+      consumes:
+      - application/json
+      description: Registers a new user in the database and returns the created ID.
+      parameters:
+      - description: Account data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_antonioducs_wyd_web-api_internal_api_dto.CreateAccountRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_antonioducs_wyd_web-api_internal_api_dto.CreateAccountResponse'
+      summary: Create Account
+      tags:
+      - accounts
+swagger: "2.0"

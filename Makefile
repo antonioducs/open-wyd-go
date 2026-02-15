@@ -12,8 +12,14 @@ dev-connect:
 dev-timer:
 	cd apps/timer-server && air
 
+dev-web-api:
+	cd apps/web-api && air
+
 generate-db:
 	cd pkg/storage/postgres && sqlc generate
+
+swagger:
+	cd apps/web-api && swag init -g cmd/app/main.go -o docs --parseDependency --parseInternal
 
 # Create a new pair of .up.sql and .down.sql files
 # Usage: make migrate-new name=create_characters

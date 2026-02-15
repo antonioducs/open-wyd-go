@@ -1,6 +1,7 @@
 package game
 
 import (
+	"context"
 	"encoding/binary"
 	"fmt"
 	"log/slog"
@@ -23,7 +24,7 @@ func NewRouter(logger *slog.Logger, usecases *application.UseCaseContainer) *Rou
 	}
 }
 
-func (r *Router) RoutePacket(sessionID uint32, payload []byte) {
+func (r *Router) RoutePacket(ctx context.Context, sessionID uint32, payload []byte) {
 	packetID := binary.LittleEndian.Uint16(payload[4:6])
 
 	r.logger.Debug("Pacote Recebido", "id", fmt.Sprintf("0x%X", packetID))
@@ -32,6 +33,7 @@ func (r *Router) RoutePacket(sessionID uint32, payload []byte) {
 	case protocol.PackageIDLogin:
 		msg := protocol.Cast[incoming.Login](payload)
 		r.usecases.Login.Execute(usecase.LoginInput{
+			Context:   ctx,
 			SessionID: sessionID,
 			Username:  msg.GetUsername(),
 			Password:  msg.GetPassword(),
